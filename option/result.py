@@ -159,7 +159,7 @@ class Result(Generic[T, E]):
         """
         return NONE if self._is_ok else Option.Some(self._val)  # type: ignore
 
-    def map(self, op: Callable[[T], U]) -> 'Union[Result[U, E], Result[T, E]]':
+    def map(self, op: Callable[[T], U]) -> 'Result[U, E]':
         """
         Applies a function to the contained :meth:`Result.Ok` value.
 
@@ -179,7 +179,7 @@ class Result(Generic[T, E]):
         """
         return self._type.Ok(op(self._val)) if self._is_ok else self  # type: ignore
 
-    def flatmap(self, op: 'Callable[[T], Result[U, E]]') -> 'Result[U, E]':
+    def flatmap(self, op: 'Callable[[T], Result[U, F]]') -> 'Result[U, Union[E, F]]':
         """
         Applies a function to the contained :meth:`Result.Ok` value.
 
@@ -207,7 +207,7 @@ class Result(Generic[T, E]):
         """
         return op(self._val) if self._is_ok else self  # type: ignore
 
-    def map_err(self, op: Callable[[E], F]) -> 'Union[Result[T, F], Result[T, E]]':
+    def map_err(self, op: Callable[[E], F]) -> 'Result[T, F]':
         """
         Applies a function to the contained :meth:`Result.Err` value.
 
